@@ -37,9 +37,10 @@ group :development, :test do
 end
 
 group :test do
-  gem 'capybara', '~> 2.1.0'
+  gem 'capybara', '>= 2.2.0'
 
 end
+gem 'rails-controller-testing'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
