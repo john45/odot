@@ -2,14 +2,21 @@ require 'rails_helper'
 
 describe 'Create todo list' do
 
-  it 'Redirect to index file on success' do
+  def create_todolist(options={})
+    options[:title] ||= 'My todolist'
+    options[:body] ||= 'This is my todo list!'
+
     visit "/todo_lists"
     click_link "New Todo List"
     expect(page).to have_content("New Todo List")
 
-    fill_in "Title", with: "My todolist"
-    fill_in "Body", with: "This is what aim todo today!"
+    fill_in "Title", with: options[:title]
+    fill_in "Body", with: options[:body]
     click_button "Create Todo list"
+  end
+
+  it 'Redirect to index file on success' do
+    create_todolist
 
     expect(page).to have_content("My todolist")
   end
@@ -17,13 +24,7 @@ describe 'Create todo list' do
   it "have display error when todolist has no title " do
     expect(TodoList.count).to eq(0)
 
-    visit "/todo_lists"
-    click_link "New Todo List"
-    expect(page).to have_content("New Todo List")
-
-    fill_in "Title", with: ""
-    fill_in "Body", with: "This is what aim todo today!"
-    click_button "Create Todo list"
+    create_todolist title: ""
 
     expect(page).to have_content("error")
     expect(TodoList.count).to eq(0)
@@ -36,13 +37,7 @@ describe 'Create todo list' do
   it "have display error when todolist a title less 3 characters " do
     expect(TodoList.count).to eq(0)
 
-    visit "/todo_lists"
-    click_link "New Todo List"
-    expect(page).to have_content("New Todo List")
-
-    fill_in "Title", with: "Hi"
-    fill_in "Body", with: "This is what aim todo today!"
-    click_button "Create Todo list"
+   create_todolist title: "hi", body: "This is what aim todo today!"
 
     expect(page).to have_content("error")
     expect(TodoList.count).to eq(0)
@@ -55,13 +50,7 @@ describe 'Create todo list' do
   it "have display error when todolist no body " do
     expect(TodoList.count).to eq(0)
 
-    visit "/todo_lists"
-    click_link "New Todo List"
-    expect(page).to have_content("New Todo List")
-
-    fill_in "Title", with: "Grocery list"
-    fill_in "Body", with: ""
-    click_button "Create Todo list"
+    create_todolist title: "Grocery list", body: ""
 
     expect(page).to have_content("error")
     expect(TodoList.count).to eq(0)
@@ -74,13 +63,7 @@ describe 'Create todo list' do
   it "have display error when todolist less 5 characters" do
     expect(TodoList.count).to eq(0)
 
-    visit "/todo_lists"
-    click_link "New Todo List"
-    expect(page).to have_content("New Todo List")
-
-    fill_in "Title", with: "Grocery list"
-    fill_in "Body", with: "body"
-    click_button "Create Todo list"
+    create_todolist title: "Grocery list", body: "body"
 
     expect(page).to have_content("error")
     expect(TodoList.count).to eq(0)
