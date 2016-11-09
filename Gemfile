@@ -38,6 +38,7 @@ end
 
 group :test do
   gem 'capybara', '>= 2.2.0'
+  gem 'shoulda-matchers', '~> 3.1.1'
 
 end
 gem 'rails-controller-testing'
